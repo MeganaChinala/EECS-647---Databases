@@ -1,8 +1,19 @@
-var express = require('express');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const app = express();
 
-var app = express();
+app.use(express.static('public'));
 
-app.get('/user', function (req, res, next){
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(bodyParser.json());
+
+app.use(cors());;
+
+app.get('/', function (req, res, next){
   return res.send('respond with a resource'); //do sql query
 });
 
@@ -16,6 +27,12 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   (err) ? console.log(err + '+++++++++++++++//////////'): console.log('connection********');
+});
+
+app.get('/user', function (req, res, next) {
+  connection.query(`SELECT * FROM User`,  function (error, results, fields){
+   res.send(results);
+  }); //do sql query
 });
 
 // require('./routes/html-routes')(app, connection);

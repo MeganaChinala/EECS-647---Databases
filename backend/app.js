@@ -1,3 +1,5 @@
+import pw from 'Secrets.js';
+
 var express = require('express');
 
 var app = express();
@@ -10,7 +12,7 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '976MWL25', //password of your mysql db
+  password: 'pw', //password of your mysql db
   database: '647-project'
 });
 

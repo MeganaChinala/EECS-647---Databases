@@ -27,11 +27,11 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   (err) ? console.log(err + '+++++++++++++++//////////'): console.log('connection********');
-  let createUser = "CREATE TABLE IF NOT EXISTS `user` (`id` INT NOT NULL AUTO_INCREMENT, `username` VARCHAR(45) NOT NULL, PRIMARY KEY(`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE, INDEX `drivers_license_idx` (`username` ASC) VISIBLE, CONSTRAINT `drivers_license` FOREIGN KEY (`username`) REFERENCES `647-project`.`drivers_license` (`drivers_license_num`));"
+  let createUser = "CREATE TABLE IF NOT EXISTS `user` (`id` INT NOT NULL AUTO_INCREMENT, `username` VARCHAR(45) NOT NULL, PRIMARY KEY(`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE, INDEX `drivers_license_idx` (`username` ASC) VISIBLE);"
   let createBars = "CREATE TABLE IF NOT EXISTS `bars` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `address` VARCHAR(45) NOT NULL, PRIMARY KEY(id));"
   let createUserBars = "CREATE TABLE IF NOT EXISTS `user_bars` (`user_id` INT NOT NULL, `bar_id` INT NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `647-project`.`user`(`id`), FOREIGN KEY (`bar_id`) REFERENCES `647-project`.`bars` (`id`), PRIMARY KEY (`user_id`, `bar_id`));"
-  let createDriversLicence = "CREATE TABLE IF NOT EXISTS `drivers_license` (`id` INT NOT NULL, `name` VARCHAR(45) NOT NULL, `birthdate` DATE NOT NULL, `age` INT NOT NULL, `address` VARCHAR(45) NOT NULL, `drivers_license_num` VARCHAR(45) NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `647-project`.`user` (`id`), PRIMARY KEY (`user_id`, `id`));"
-  let createRemedy = "CREATE TABLE IF NOT EXISTS `remedy` (`id` INT NOT NULL AUTO_INCREMENT, FOREIGN KEY (`user_id`) REFERENCES `647-project`.`user`(`id`), PRIMARY KEY (`id`, `user_id`));"
+  let createDriversLicence = "CREATE TABLE IF NOT EXISTS `drivers_license` (`id` INT NOT NULL REFERENCES `user` (`id`), `name` VARCHAR(45) NOT NULL, `birthdate` DATE NOT NULL, `age` INT NOT NULL, `address` VARCHAR(45) NOT NULL, `drivers_license_num` VARCHAR(45) NOT NULL, PRIMARY KEY (`id`));"
+  let createRemedy = "CREATE TABLE IF NOT EXISTS `remedy` (`id` INT NOT NULL AUTO_INCREMENT, CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `647-project`.`user`(`id`), PRIMARY KEY (`id`));"
   let createHomeRemedy = "CREATE TABLE IF NOT EXISTS `home_remedy` (`id` INT NOT NULL REFERENCES `remedy` (`id`), `info` VARCHAR(200) NOT NULL, `recipe` VARCHAR(200) NOT NULL, PRIMARY KEY (`id`));"
   let createPharmRemedy = "CREATE TABLE IF NOT EXISTS `pharm_remedy` (`id` INT NOT NULL REFERENCES `remedy` (`id`), `name` VARCHAR(50), `dose` VARCHAR(30), PRIMARY KEY (`id`))"
   connection.query(createUser, function (err, res){

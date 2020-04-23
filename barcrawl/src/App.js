@@ -35,8 +35,8 @@ class App extends Component{
       <div className="App">
           <UserForm/>
         <div>
-          <h1>Data</h1>
-          {this.state.users.map(user => <p key={user.id}>{user.id}</p>)}
+          <h2>Users</h2>
+          {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
         </div>
       </div>
     );

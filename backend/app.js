@@ -76,6 +76,24 @@ app.get('/topBars', function (req, res, next) {
   });
 });
 
+app.get('/topRemedies', function(req, res, next) {
+  connection.query('(SELECT `p`.name, `p`.dose FROM pharm_remedy `p` JOIN (SELECT `name`, COUNT(*) AS `pcount` FROM pharm_remedy GROUP BY `name`) `p2` ON (`p2`.name = `p`.name) ORDER BY `p2`.pcount DESC LIMIT 0,1) UNION ALL (SELECT `h`.info, `h`.recipe FROM home_remedy `h` JOIN (SELECT `recipe`, COUNT(*) AS `hcount` FROM `home_remedy` GROUP BY `recipe`) `h2` ON (`h2`.recipe = `h`.recipe) ORDER BY `h2`.hcount DESC) LIMIT 0,2', function(error, results, fields) {
+    res.send(results);
+  });
+});
+
+app.get('/remedies', function(req, res, next) {
+  connection.query('SELECT * FROM (SELECT * FROM home_remedy) AS `home` UNION ALL SELECT * FROM pharm_remedy', function(error, results, fields) {
+    res.send(results);
+  })
+})
+
+app.get('/underage', function(req, res, next) {
+  connection.query('SELECT * from `user`, `drivers_license` WHERE `age` < 21 AND user.`id` = drivers_license.`id`', function(error, results, fields) {
+    res.send(results);
+  })
+})
+
 // require('./routes/html-routes')(app, connection);
 
 module.exports = app;

@@ -7,12 +7,17 @@ class App extends Component{
   state = {
     users: [],
     topRemedies: [],
-    topBars: []
+    topBars: [],
+    remedies: [],
+    underage: []
   }
 
   componentDidMount() {
     this.getUsers();
     this.getTopBars();
+    this.getTopRemedies();
+    this.getRemedies();
+    this.getUnderage();
   }
 
   getUsers = _ => {
@@ -42,6 +47,39 @@ class App extends Component{
       .catch(error => console.log(error));
   }
 
+  getTopRemedies = _ => {
+    fetch('http://localhost:3001/topRemedies')
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        this.setState({topRemedies: data})
+      })
+      .catch(error => console.log(error));
+  }
+
+  getRemedies = _ => {
+    fetch('http://localhost:3001/remedies')
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      this.setState({remedies: data})
+    })
+    .catch(error => console.log(error));
+  }
+
+  getUnderage = _ => {
+    fetch('http://localhost:3001/underage')
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      this.setState({underage: data})
+    })
+    .catch(error => console.log(error));
+  }
+
   render() {
     return (
       <div className="App">
@@ -50,7 +88,13 @@ class App extends Component{
           <h2>Users</h2>
           {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
           <h2>Top Bars</h2>
-          {this.state.topBars.map(bar => <p>{bar.name}</p>)}
+          {this.state.topBars.map(bar => <p key={bar.id}>{bar.name}</p>)}
+          <h2>Top Remedies</h2>
+          {this.state.topRemedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.name}<br/>Additional info: {remedy.dose}</p>)}
+          <h2>All Remedies</h2>
+          {this.state.remedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.info}<br/>Additional info: {remedy.recipe}</p>)}
+          <h2>Underage</h2>
+          {this.state.underage.map(underage => <p key={underage.id}>User: {underage.username}<br/>Name: {underage.name}</p>)}
         </div>
       </div>
     );

@@ -5,7 +5,9 @@ import UserForm from './component/UserForm/UserForm'
 
 class App extends Component{
   state = {
-    users: []
+    users: [],
+    topRemedies: [],
+    topBars: []
   }
 
   componentDidMount() {

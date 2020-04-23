@@ -1,0 +1,22 @@
+.UserForm {
+    margin-top: 2em;
+}
+
+.form-space {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+.data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 5px;
+    align-items: center;
+}
+
+label, input {
+    margin-right: 5px;
+}

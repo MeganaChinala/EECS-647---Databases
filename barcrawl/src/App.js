@@ -12,6 +12,7 @@ class App extends Component{
 
   componentDidMount() {
     this.getUsers();
+    this.getTopBars();
   }
 
   getUsers = _ => {
@@ -30,6 +31,17 @@ class App extends Component{
     .catch(error => console.log(error));
   }
 
+  getTopBars = _ => {
+    fetch('http://localhost:3001/topBars')
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        this.setState({topBars: data})
+      })
+      .catch(error => console.log(error));
+  }
+
   render() {
     return (
       <div className="App">
@@ -37,6 +49,8 @@ class App extends Component{
         <div>
           <h2>Users</h2>
           {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
+          <h2>Top Bars</h2>
+          {this.state.topBars.map(bar => <p>{bar.name}</p>)}
         </div>
       </div>
     );

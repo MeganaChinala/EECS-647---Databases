@@ -65,9 +65,15 @@ connection.connect(function (err) {
 });
 
 app.get('/user', function (req, res, next) {
-  connection.query(`SELECT * FROM User`,  function (error, results, fields){
+  connection.query(`SELECT * FROM user`,  function (error, results, fields){
    res.send(results);
   }); //do sql query
+});
+
+app.get('/topBars', function (req, res, next) {
+  connection.query('SELECT `name` FROM user_bars `ub1`, `bars` INNER JOIN user_bars `ub2` WHERE `ub1`.user_id <> `ub2`.user_id AND `ub1`.bar_id = `ub2`.bar_id AND `ub1`.bar_id = bars.id GROUP BY name ORDER BY COUNT(*) DESC LIMIT 0,2', function (error, results, fields) {
+    res.send(results);
+  });
 });
 
 // require('./routes/html-routes')(app, connection);

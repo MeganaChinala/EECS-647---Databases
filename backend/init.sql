@@ -17,6 +17,10 @@ INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (1, 1);
 INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (2, 2);
 INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (3, 3);
 INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (4, 4);
+INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (2, 3);
+INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (2, 4);
+INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (3, 1);
+INSERT INTO `647-project`.`user_bars` (`user_id`, `bar_id`) VALUES (4, 2);
 
 INSERT INTO `647-project`.`home_remedy` (`id`, `info`, `recipe`) VALUES (2, "A good nap", "counch or bed");
 INSERT INTO `647-project`.`remedy` (`id`) VALUES (2);

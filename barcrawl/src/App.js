@@ -83,18 +83,29 @@ class App extends Component{
   render() {
     return (
       <div className="App">
-          <UserForm/>
-        <div>
-          <h2>Users</h2>
-          {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
-          <h2>Top Bars</h2>
-          {this.state.topBars.map(bar => <p key={bar.id}>{bar.name}</p>)}
-          <h2>Top Remedies</h2>
-          {this.state.topRemedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.name}<br/>Additional info: {remedy.dose}</p>)}
-          <h2>All Remedies</h2>
-          {this.state.remedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.info}<br/>Additional info: {remedy.recipe}</p>)}
-          <h2>Underage</h2>
-          {this.state.underage.map(underage => <p key={underage.id}>User: {underage.username}<br/>Name: {underage.name}</p>)}
+        <h1>BarCrawl</h1>
+        <UserForm/>
+        <div class="container">
+          <div class="content">
+            <h2>Users</h2>
+            {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
+          </div>
+          <div class="content">
+            <h2>Top Bars</h2>
+            {this.state.topBars.map(bar => <p key={bar.id}>{bar.name}</p>)}
+          </div>
+          <div class="content">
+            <h2>Top Remedies</h2>
+            {this.state.topRemedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.name}<br/>Additional info: {remedy.dose}</p>)}
+          </div>
+          <div class="content">
+            <h2>All Remedies</h2>
+            {this.state.remedies.map(remedy => <p key={remedy.id}>Suggestion: {remedy.info}<br/>Additional info: {remedy.recipe}</p>)}
+          </div>
+          <div class="content">
+            <h2>Underage</h2>
+            {this.state.underage.map(underage => <p key={underage.id}>Name: {underage.name}<br/>User: {underage.username}</p>)}
+          </div>
         </div>
       </div>
     );

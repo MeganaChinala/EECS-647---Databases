@@ -8,64 +8,134 @@ const Condition = ({ when, is, children }) => (
   </Field>
 )
 
-const onSubmit = async values => {
-  window.alert(JSON.stringify(values, 0, 2))
-}
-
 class UserForm extends Component {
+    handleSubmit(values) {
+        fetch('http://localhost:3001/submit', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .then(response => console.log('Success:', JSON.stringify(response.data)))
+        .catch(error => console.error('Error:', error));
+    }
+
     render() {
         return (
           <div className="UserForm">
-            <Form onSubmit={onSubmit} allowNull>
-              {({ form }) => (
+            <Form onSubmit={this.handleSubmit}>
+              {({ handleSubmit }) => (
                 <div>
-                  <form className="form-space">
+                  <form onSubmit={handleSubmit} className="form-space">
                     <div className="data">
-                      <label>Username</label>
-                      <input type="text" name="name" placeholder="username" />
+                      <label>
+                        Username
+                        <Field
+                          id="username"
+                          type="text"
+                          name="username"
+                          placeholder="username"
+                          component="input"
+                        />
+                      </label>
+                      <label>
+                        Driver's License
+                        <Field
+                          id="name"
+                          type="text"
+                          name="name"
+                          placeholder="Name"
+                          component="input"
+                        />
+                        <Field
+                          id="licenseNo"
+                          type="text"
+                          name="licenseNo"
+                          placeholder="License Number"
+                          component="input"
+                        />
+                        <Field
+                          id="age"
+                          type="number"
+                          name="age"
+                          placeholder="Age"
+                          component="input"
+                        />
+                        <Field
+                          id="birthdate"
+                          type="date"
+                          name="birthdate"
+                          placeholder="Birthdate"
+                          component="input"
+                        />
+                        <Field
+                          id="address"
+                          type="text"
+                          name="address"
+                          placeholder="Address"
+                          component="input"
+                        />
+                      </label>
                     </div>
                     <div className="data">
                       <label>Bar</label>
-                      <input type="text" name="name" placeholder="name" />
-                      <input type="text" name="address" placeholder="address" />
+                      <Field
+                        id="barname"
+                        type="text"
+                        name="barname"
+                        placeholder="Bar Name"
+                        component="input"
+                      />
+                      <Field
+                        id="barAddress"
+                        type="text"
+                        name="barAddress"
+                        placeholder="barAddress"
+                        component="input"
+                      />
                     </div>
                     <div className="form-space">
-                        <div className="data">
+                      <div className="data">
                         <div>
-                            <label>Remedy</label>
-                            <div>
+                          <label>Remedy</label>
+                          <div>
                             <label>
-                                <Field
+                              <Field
+                                id="home"
                                 name="remedy"
                                 component="input"
                                 type="radio"
                                 value="home"
-                                />{" "}
-                                Home
+                              />{" "}
+                              Home
                             </label>
                             <label>
-                                <Field
+                              <Field
+                                id="pharm"
                                 name="remedy"
                                 component="input"
                                 type="radio"
                                 value="pharm"
-                                />{" "}
-                                Pharmaceutical
+                              />{" "}
+                              Pharmaceutical
                             </label>
-                            </div>
+                          </div>
                         </div>
-                        </div>
+                      </div>
                       <Condition when="remedy" is="home">
                         <div>
                           <label>Info</label>
                           <Field
+                            id="info"
                             name="info"
                             component="input"
                             type="text"
-                            placeholder="Information & Instructions"
+                            placeholder="Information &amp; Instructions"
                           />
                           <label>Ingredients</label>
                           <Field
+                            id="ingredients"
                             name="ingredients"
                             component="input"
                             type="text"
@@ -77,6 +147,7 @@ class UserForm extends Component {
                         <div>
                           <label>Name</label>
                           <Field
+                            id="med"
                             name="med"
                             component="input"
                             type="text"
@@ -84,6 +155,7 @@ class UserForm extends Component {
                           />
                           <label>Doses</label>
                           <Field
+                            id="dose"
                             name="dose"
                             component="input"
                             type="text"
@@ -92,7 +164,7 @@ class UserForm extends Component {
                         </div>
                       </Condition>
                     </div>
-                    {/* <input type="submit" value="Submit" /> */}
+                    <input type="submit" value="Submit" />
                   </form>
                 </div>
               )}

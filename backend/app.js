@@ -21,7 +21,7 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', //password of your mysql db
+  password: '976MWL25', //password of your mysql db
   database: '647-project'
 });
 
@@ -92,6 +92,34 @@ app.get('/underage', function(req, res, next) {
   connection.query('SELECT * from `user`, `drivers_license` WHERE `age` < 21 AND user.`id` = drivers_license.`id`', function(error, results, fields) {
     res.send(results);
   })
+})
+
+app.post('/submit', function(req, res, next) {
+  let remedy;
+  if(req.body.remedy === "home") {
+    remedy = 'INSERT INTO `647-project`.`home_remedy` (`info`, `recipe`) VALUES ("' + req.body.info + '", "' + req.body.ingredients + '");'
+  } else {
+    remedy = 'INSERT INTO `647-project`.`pharm_remedy` (`id`, `name`, `dose`) VALUES ("' + req.body.med + '", "' + req.body.dose + '");'
+  }
+  connection.query('INSERT INTO `647-project`.`drivers_license` (`name`, `birthdate`, `age`, `address`, `drivers_license_num`) VALUES ("'+ req.body.name +'", "'+ req.body.birthdate +'",'+ req.body.age +', "' + req.body.address + '", "' + req.body.licenseNo + '");'
+  +
+  'INSERT INTO `647-project`.`user` (`username`) VALUES ("'+ req.body.username + '");'
+  +
+  'INSERT INTO `647-project`.`bars` (`name`, `address`) VALUES ("' + req.body.barName + '", "' + req.body.barAddress + '");'
+  +
+  'INSERT INTO `647-project`.`remedy`;'
+  +
+  remedy
+  , function(error, results, fields) {
+    res.send(results);
+  })
+  // connection.query('INSERT INTO `647-project`.`user` (`username`) VALUES ("'+ req.body.username + '");', function(error, results, fields) {
+  //   res.send(results);
+  // })
+  // connection.query('INSERT INTO `647-project`.`bars` (`name`, `address`) VALUES ("' + req.body.barName + '", "' + req.body.barAddress + '");', function(error, results, fields) {
+  //   res.send(results);
+  // })
+  
 })
 
 // require('./routes/html-routes')(app, connection);

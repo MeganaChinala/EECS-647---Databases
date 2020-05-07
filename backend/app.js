@@ -21,7 +21,7 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '976MWL25', //password of your mysql db
+  password: '', //password of your mysql db
   database: '647-project'
 });
 
@@ -31,7 +31,7 @@ connection.connect(function (err) {
   let createBars = "CREATE TABLE IF NOT EXISTS `bars` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `address` VARCHAR(45) NOT NULL, PRIMARY KEY(id));"
   let createUserBars = "CREATE TABLE IF NOT EXISTS `user_bars` (`user_id` INT NOT NULL, `bar_id` INT NOT NULL, FOREIGN KEY (`user_id`) REFERENCES `647-project`.`user`(`id`), FOREIGN KEY (`bar_id`) REFERENCES `647-project`.`bars` (`id`), PRIMARY KEY (`user_id`, `bar_id`));"
   let createDriversLicence = "CREATE TABLE IF NOT EXISTS `drivers_license` (`id` INT NOT NULL REFERENCES `user` (`id`), `name` VARCHAR(45) NOT NULL, `birthdate` DATE NOT NULL, `age` INT NOT NULL, `address` VARCHAR(45) NOT NULL, `drivers_license_num` VARCHAR(45) NOT NULL, PRIMARY KEY (`id`));"
-  let createRemedy = "CREATE TABLE IF NOT EXISTS `remedy` (`id` INT NOT NULL AUTO_INCREMENT, CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `647-project`.`user`(`id`), PRIMARY KEY (`id`));"
+  let createRemedy = "CREATE TABLE IF NOT EXISTS `remedy` (`id` INT AUTO_INCREMENT, CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `647-project`.`user`(`id`), PRIMARY KEY (`id`));"
   let createHomeRemedy = "CREATE TABLE IF NOT EXISTS `home_remedy` (`id` INT NOT NULL REFERENCES `remedy` (`id`), `info` VARCHAR(200) NOT NULL, `recipe` VARCHAR(200) NOT NULL, PRIMARY KEY (`id`));"
   let createPharmRemedy = "CREATE TABLE IF NOT EXISTS `pharm_remedy` (`id` INT NOT NULL REFERENCES `remedy` (`id`), `name` VARCHAR(50), `dose` VARCHAR(30), PRIMARY KEY (`id`))"
   connection.query(createUser, function (err, res){
@@ -95,32 +95,42 @@ app.get('/underage', function(req, res, next) {
 })
 
 app.post('/submit', function(req, res, next) {
-  let remedy;
+  connection.query('INSERT INTO `647-project`.`user` (`username`) VALUES ("'+ req.body.username + '");', function(err, res){});
+
+  connection.query('INSERT INTO `647-project`.`remedy` VALUES ((SELECT MAX(`id`) FROM `647-project`.`user`));', function (err, res) {
+    if (err) throw err;
+    console.log("remedy row created");
+  });
+
+  connection.query('INSERT INTO `647-project`.`drivers_license` (`id`, `name`, `birthdate`, `age`, `address`, `drivers_license_num`) VALUES ((SELECT MAX(`id`) FROM `647-project`.`user`),"'+ req.body.name +'", "'+ req.body.birthdate +'",'+ req.body.age +', "' + req.body.address + '", "' + req.body.licenseNo + '");', function(err, res) {
+    if (err) throw err;
+    console.log("DL row created");
+  });
+
+  connection.query('INSERT INTO `647-project`.`bars` (`name`, `address`) VALUES ("'+req.body.barName+'", "'+req.body.barAddress+'");',function(err, res) {
+    if (err) throw err;
+    console.log("bar row created");
+  });
+
   if(req.body.remedy === "home") {
-    remedy = 'INSERT INTO `647-project`.`home_remedy` (`info`, `recipe`) VALUES ("' + req.body.info + '", "' + req.body.ingredients + '");'
+    connection.query('INSERT INTO `647-project`.`home_remedy` (`id`, `info`, `recipe`) VALUES ((SELECT COUNT(`id`) from `647-project`.`remedy`), "' + req.body.info + '", "' + req.body.ingredients + '");', function(err, res) {
+      if (err) throw err;
+      console.log("home_remedy row created");
+    });
   } else {
-    remedy = 'INSERT INTO `647-project`.`pharm_remedy` (`id`, `name`, `dose`) VALUES ("' + req.body.med + '", "' + req.body.dose + '");'
+    connection.query('INSERT INTO `647-project`.`pharm_remedy` (`id`, `name`, `dose`) VALUES ("(SELECT MAX(`id`) from `647-project`.`remedy`)' + req.body.med + '", "' + req.body.dose + '");', function(err, res) {
+      if (err) throw err;
+      console.log("pharm_remedy row created");
+    });
   }
-  connection.query('INSERT INTO `647-project`.`drivers_license` (`name`, `birthdate`, `age`, `address`, `drivers_license_num`) VALUES ("'+ req.body.name +'", "'+ req.body.birthdate +'",'+ req.body.age +', "' + req.body.address + '", "' + req.body.licenseNo + '");'
-  +
-  'INSERT INTO `647-project`.`user` (`username`) VALUES ("'+ req.body.username + '");'
-  +
-  'INSERT INTO `647-project`.`bars` (`name`, `address`) VALUES ("' + req.body.barName + '", "' + req.body.barAddress + '");'
-  +
-  'INSERT INTO `647-project`.`remedy`;'
-  +
-  remedy
-  , function(error, results, fields) {
-    res.send(results);
-  })
+  
+})
   // connection.query('INSERT INTO `647-project`.`user` (`username`) VALUES ("'+ req.body.username + '");', function(error, results, fields) {
   //   res.send(results);
   // })
   // connection.query('INSERT INTO `647-project`.`bars` (`name`, `address`) VALUES ("' + req.body.barName + '", "' + req.body.barAddress + '");', function(error, results, fields) {
   //   res.send(results);
   // })
-  
-})
 
 // require('./routes/html-routes')(app, connection);
 
